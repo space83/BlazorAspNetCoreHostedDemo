@@ -1,0 +1,130 @@
+﻿@page "/productdetailpage/{productId:int}"
+@attribute [Authorize(Roles = "Administrator,User")]
+@using BlazorAspNetCoreHostedDemo.Client.Authentication
+@using BlazorAspNetCoreHostedDemo.Shared
+@using System.Net.Http.Headers
+@inject HttpClient httpClient
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject IJSRuntime js
+@inject NavigationManager navManager
+
+
+<style>
+    .centre {
+        text-align: center;
+    }
+
+    .right {
+        float: right;
+    }
+
+    .imgsize {
+        height: 210px;
+        width: 280px;
+    }
+
+    .table {
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9em;
+        font-family: sans-serif;
+        width: 100%
+    }
+
+        .table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+        }
+
+        .table th {
+            padding: 12px 15px;
+            width: 20%;
+            text-align: left;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            /* width: 10%; */
+        }
+
+    .variance {
+        background-color: lightblue;
+        border: 7px solid lightblue;
+        display: block;
+        width: 98%;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+</style>
+
+<br />
+<br />
+
+@if (product == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @*<p>Product\@product.Name</p>*@
+    <div>
+        <div class="centre">
+            <h1>@product.Name</h1>
+            <img class="imgsize" src=@product.Pictures />
+        </div>
+
+        <table class="table">
+            <tr>
+                <th>Description</th>
+                <td>@product.Description</td>
+            </tr>
+
+        </table>
+
+        <p class="variance">Variance</p>
+
+        <table class="table">
+            <tr>
+                <th>Full Spec</th>
+                <td>@product.Price1.ToString("N0")</td>
+            </tr>
+            <tr>
+                <th>Low Spec</th>
+                <td>@product.Price2.ToString("N0")</td>
+            </tr>
+        </table>
+
+        <br /><br />
+        <div class="right">
+            <NavLink class="nav-link" href="products">
+                <button class="btn btn-primary">Back</button>
+            </NavLink>
+        </div>
+
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public int productId { get; set; }
+    private Product? product;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //await GetProduct(productId);
+        product = await httpClient.GetFromJsonAsync<Product>($"api/Product/GetProduct?productCode={productId}");
+        await base.OnInitializedAsync();
+    }
+ 
+
+    private async Task GetProduct(int productId)
+    {
+        product = await httpClient.GetFromJsonAsync<Product>($"api/Product/GetProduct?productCode={productId}");
+        await base.OnInitializedAsync();
+    }
+
+
+}

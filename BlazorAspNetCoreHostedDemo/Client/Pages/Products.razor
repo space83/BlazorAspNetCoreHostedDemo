@@ -1,0 +1,81 @@
+﻿@page "/products"
+@attribute [Authorize(Roles = "Administrator,User")]
+@using BlazorAspNetCoreHostedDemo.Shared
+@inject HttpClient httpClient
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navManager
+
+<PageTitle>Products</PageTitle>
+
+<style>
+    .example:after {
+        content: '...';
+        display: inline-block;
+        color: #000;
+        font-size: 20px;
+        position: relative;
+        top: -40px;
+        left: 31px;
+    }
+
+    .example {
+        width: 600px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        height: 5.1em;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: relative;
+        padding: 0 0.5em;
+    }
+</style>
+
+<h1>Products</h1>
+
+<p>This component demonstrates Products listings.</p>
+
+@if (productList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Price Range (RM)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in productList)
+            {
+                <tr>
+                    <td>
+                        <NavLink href="@($"productdetailpage/{p.Id}")">
+                            <span>@p.Name</span>
+                        </NavLink>
+                    </td>
+                    <td class="example">@p.Description</td>
+                    <td><img style="width: 200px; height: 160px; border-radius:8px;" src="@p.Pictures" /></td>
+                    <td>@p.Price1 - @p.Price2</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Product>? productList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        productList = await httpClient.GetFromJsonAsync<List<Product>>("api/Product/GetProducts");
+        await base.OnInitializedAsync();
+    }
+
+
+}
