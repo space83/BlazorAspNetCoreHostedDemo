@@ -1,15 +1,24 @@
 using BlazorAspNetCoreHostedDemo.Server;
 using BlazorAspNetCoreHostedDemo.Server.Authentication;
+using BlazorAspNetCoreHostedDemo.Server.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//general
+var Configuration = builder.Configuration;
 
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+});
+
 
 // dependency injection
 builder.Services.AddAuthentication(o =>
@@ -31,7 +40,7 @@ builder.Services.AddAuthentication(o =>
 });
 
 builder.Services.AddSingleton<UserAccountService>();
-builder.Services.AddSingleton<ProductService>();
+builder.Services.AddTransient<ProductService>();
 
 var app = builder.Build();
 
