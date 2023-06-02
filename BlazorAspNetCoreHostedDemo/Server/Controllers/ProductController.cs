@@ -22,7 +22,7 @@ namespace BlazorAspNetCoreHostedDemo.Server.Controllers
 
         [HttpGet]
         [Route("GetProduct")]
-        public ActionResult<Product> DeleteProduct([FromQuery] int productCode)
+        public ActionResult<Product> GetProduct([FromQuery] int productCode)
         {
             return _productService.GetProduct(productCode);
         }
@@ -40,7 +40,23 @@ namespace BlazorAspNetCoreHostedDemo.Server.Controllers
             { 
                 return BadRequest(ex.Message);
             }
-
         }
+
+        [HttpDelete]
+        [Route("DeleteProduct")]
+        public ActionResult DeleteProduct([FromQuery] int productId)
+        {
+            try
+            {
+                _productService.DeleteProduct(productId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
     }
 }

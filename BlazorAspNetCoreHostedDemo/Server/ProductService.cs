@@ -35,7 +35,14 @@ namespace BlazorAspNetCoreHostedDemo.Server
 
         public void AddProduct(Product product)
         {
-            _context.Add(product);
+            _context.Product.Add(product);
+            _context.SaveChanges();
+        }
+
+        public void DeleteProduct(int productId)
+        {
+            var product = new Product { Id = productId };
+            _context.Product.Entry(product).State = EntityState.Deleted;
             _context.SaveChanges();
         }
 

@@ -4,6 +4,8 @@
 @inject HttpClient httpClient
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navManager
+@using System.Net.Http.Headers
+@inject IJSRuntime js
 
 
 <style>
@@ -24,7 +26,6 @@
         height: 5.1em;
         display: block;
         overflow: hidden;
-        text-overflow: ellipsis;
         position: relative;
         padding: 0 0.5em;
     }
@@ -32,6 +33,8 @@
     .left {
         float: left;
     }
+
+
 </style>
 
 
@@ -41,6 +44,8 @@
 }
 else
 {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <PageTitle>Products</PageTitle>
     <h3>Products</h3>
 
@@ -59,6 +64,8 @@ else
                     <th>Description</th>
                     <th>Image</th>
                     <th>Price Range (RM)</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -73,6 +80,12 @@ else
                         <td class="example">@p.Description</td>
                         <td><img style="width: 200px; height: 160px; border-radius:8px;" src="@p.Pictures" /></td>
                         <td>@p.Price1.ToString("N0") - @p.Price2.ToString("N0")</td>
+                        <td>
+                            <button type="button" class="btn btn-danger" @onclick="async () => {await DeleteProduct(p.Id);}"><i class="fa fa-trash" /></button>
+                         </td>
+                        <td>                     
+                            <button type="button" class="btn btn-primary"><i class="fa fa-edit" /></button>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -94,4 +107,17 @@ else
         navManager.NavigateTo("addproduct", true);
     }
 
+    private async Task DeleteProduct(int productId)
+    {
+        var result = await httpClient.DeleteAsync($"api/Product/DeleteProduct?productId={productId}");
+        if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            productList = await httpClient.GetFromJsonAsync<List<Product>>("api/Product/GetProducts");
+        else
+        {
+            await js.InvokeVoidAsync("alert", "Error remove product.");
+            return;
+        }
+
+        
+    }
 }
