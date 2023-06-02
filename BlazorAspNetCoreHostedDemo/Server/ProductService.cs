@@ -1,4 +1,5 @@
-﻿using BlazorAspNetCoreHostedDemo.Server.Data;
+﻿using BlazorAspNetCoreHostedDemo.Client.Pages;
+using BlazorAspNetCoreHostedDemo.Server.Data;
 using BlazorAspNetCoreHostedDemo.Shared;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,7 @@ namespace BlazorAspNetCoreHostedDemo.Server
         private readonly DataContext _context;
         //private List<Product> _products;
 
-        public ProductService(DataContext context) //DataContext context
+        public ProductService(DataContext context) 
         {
             _context = context;
             //_products = new List<Product>
@@ -30,6 +31,12 @@ namespace BlazorAspNetCoreHostedDemo.Server
         {
             //return _products.Where(a => a.Id == Id).Single();
             return _context.Product.Where(a => a.Id == Id).Single();
+        }
+
+        public void AddProduct(Product product)
+        {
+            _context.Add(product);
+            _context.SaveChanges();
         }
 
 

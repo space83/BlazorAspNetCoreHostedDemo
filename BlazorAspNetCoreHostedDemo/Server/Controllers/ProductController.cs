@@ -27,5 +27,20 @@ namespace BlazorAspNetCoreHostedDemo.Server.Controllers
             return _productService.GetProduct(productCode);
         }
 
+        [HttpPost]
+        [Route("AddProduct")]
+        public ActionResult AddProduct([FromBody] Product product)
+        {
+            try
+            {
+                _productService.AddProduct(product);
+                return Ok(product);
+            }
+            catch (Exception ex) 
+            { 
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
 }

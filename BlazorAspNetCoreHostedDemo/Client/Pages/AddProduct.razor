@@ -1,0 +1,65 @@
+﻿@page "/addproductpage"
+@attribute [Authorize(Roles = "Administrator,User")]
+@using BlazorAspNetCoreHostedDemo.Shared
+@using System.Net;
+@inject HttpClient httpClient
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navManager
+@inject IJSRuntime js
+
+<PageTitle>Add Product</PageTitle>
+<h3>Add Product</h3>
+
+
+<div class="row">
+    
+    <div class="col-lg-12 offset-lg-12 pt-12 pb-12 border">
+        <div class="mb-3 col-md-6">
+            <label>Name</label>
+            <input type="text" class="form-control" placeholder="Name" @bind="product.Name" />
+        </div>
+
+        <div class="mb-3">
+            <label>Description</label>
+            <textarea type="text" class="form-control" rows="3" @bind="product.Description" />
+        </div>
+
+        <div class="mb-3">
+            <label>Picture</label>
+            <input type="text" class="form-control" placeholder="Picture" @bind="product.Pictures" />
+        </div>
+
+        <div class="form-row">
+            <div class="mb-3 col-md-4">
+                <label>Price From</label>
+                <input type="number" class="form-control" placeholder="RM" @bind="product.Price1" />
+            </div>
+
+            <div class="mb-3 col-md-4">
+                <label>Price To</label>
+                <input type="number" class="form-control" placeholder="RM" @bind="product.Price2" />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" @onclick="AddNewProduct">Submit</button>
+        </div>       
+    </div>
+</div>
+
+@code {
+    private Product product = new Product();
+
+    private async Task AddNewProduct()
+    {
+        var result = await httpClient.PostAsJsonAsync<Product>("api/Product/AddProduct", product);
+        if (result.StatusCode == HttpStatusCode.OK)
+            navManager.NavigateTo("products", true);
+        else
+        {
+            await js.InvokeVoidAsync("alert", "Error add product.");
+            return;
+        }
+    }
+
+}

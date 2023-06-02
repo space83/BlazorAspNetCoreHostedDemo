@@ -5,7 +5,6 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navManager
 
-<PageTitle>Products</PageTitle>
 
 <style>
     .example:after {
@@ -29,11 +28,12 @@
         position: relative;
         padding: 0 0.5em;
     }
+
+    .left {
+        float: left;
+    }
 </style>
 
-<h1>Products</h1>
-
-<p>This component demonstrates Products listings.</p>
 
 @if (productList == null)
 {
@@ -41,31 +41,43 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Image</th>
-                <th>Price Range (RM)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var p in productList)
-            {
+    <PageTitle>Products</PageTitle>
+    <h3>Products</h3>
+
+    <div>
+        <NavLink class="nav-link" href="addproductpage">
+            <button class="left btn btn-primary">Add New Product</button>
+        </NavLink>
+
+        <br />
+        <br />
+
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        <NavLink href="@($"productdetailpage/{p.Id}")">
-                            <span>@p.Name</span>
-                        </NavLink>
-                    </td>
-                    <td class="example">@p.Description</td>
-                    <td><img style="width: 200px; height: 160px; border-radius:8px;" src="@p.Pictures" /></td>
-                    <td>@p.Price1 - @p.Price2</td>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Price Range (RM)</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var p in productList)
+                {
+                    <tr>
+                        <td>
+                            <NavLink href="@($"productdetailpage/{p.Id}")">
+                                <span>@p.Name</span>
+                            </NavLink>
+                        </td>
+                        <td class="example">@p.Description</td>
+                        <td><img style="width: 200px; height: 160px; border-radius:8px;" src="@p.Pictures" /></td>
+                        <td>@p.Price1.ToString("N0") - @p.Price2.ToString("N0")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 
 @code {
@@ -77,5 +89,9 @@ else
         await base.OnInitializedAsync();
     }
 
+    private void AddProduct()
+    {
+        navManager.NavigateTo("addproduct", true);
+    }
 
 }
