@@ -57,6 +57,20 @@ namespace BlazorAspNetCoreHostedDemo.Server.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("UpdateProduct")]
+        public ActionResult UpdateProduct([FromBody] Product product)
+        {
+            try
+            {
+                _productService.UpdateProduct(product);
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }

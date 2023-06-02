@@ -83,8 +83,10 @@ else
                         <td>
                             <button type="button" class="btn btn-danger" @onclick="async () => {await DeleteProduct(p.Id);}"><i class="fa fa-trash" /></button>
                          </td>
-                        <td>                     
-                            <button type="button" class="btn btn-primary"><i class="fa fa-edit" /></button>
+                        <td>
+                            <NavLink href="@($"editproductpage/{p.Id}")">
+                                <button type="button" class="btn btn-primary"><i class="fa fa-edit" /></button>
+                            </NavLink>                            
                         </td>
                     </tr>
                 }
@@ -116,8 +118,8 @@ else
         {
             await js.InvokeVoidAsync("alert", "Error remove product.");
             return;
-        }
-
-        
+        }        
     }
+
+
 }

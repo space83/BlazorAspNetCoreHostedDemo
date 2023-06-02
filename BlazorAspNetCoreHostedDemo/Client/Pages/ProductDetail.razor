@@ -60,7 +60,6 @@
 </style>
 
 
-
 @if (product == null)
 {
     <p><em>Loading...</em></p>
@@ -113,17 +112,10 @@ else
 @code {
     [Parameter]
     public int productId { get; set; }
+
     private Product? product;
 
     protected override async Task OnInitializedAsync()
-    {
-        //await GetProduct(productId);
-        product = await httpClient.GetFromJsonAsync<Product>($"api/Product/GetProduct?productCode={productId}");
-        await base.OnInitializedAsync();
-    }
- 
-
-    private async Task GetProduct(int productId)
     {
         product = await httpClient.GetFromJsonAsync<Product>($"api/Product/GetProduct?productCode={productId}");
         await base.OnInitializedAsync();

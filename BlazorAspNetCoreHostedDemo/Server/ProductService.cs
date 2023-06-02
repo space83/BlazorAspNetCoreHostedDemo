@@ -46,6 +46,13 @@ namespace BlazorAspNetCoreHostedDemo.Server
             _context.SaveChanges();
         }
 
+        public void UpdateProduct(Product product)
+        {
+            _context.Product.Add(product);
+            _context.Product.Entry(product).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
 
     }
 }
