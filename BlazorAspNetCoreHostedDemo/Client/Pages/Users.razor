@@ -1,6 +1,7 @@
-﻿@page "/users"
+﻿@page "/userlist"
 @attribute [Authorize(Roles = "Administrator,User")]
 @using BlazorAspNetCoreHostedDemo.Shared
+@using Microsoft.AspNetCore.Components.Authorization
 @inject HttpClient httpClient
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navManager
@@ -38,7 +39,7 @@
 </style>
 
 
-@if (productList == null)
+@if (userList == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -46,12 +47,12 @@ else
 {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <PageTitle>Products</PageTitle>
-    <h3>Products</h3>
+    <PageTitle>User List</PageTitle>
+    <h3>User List</h3>
 
     <div>
-        <NavLink class="nav-link" href="addproductpage">
-            <button class="left btn btn-primary">Add New Product</button>
+        <NavLink class="nav-link" href="adduser">
+            <button class="left btn btn-primary">Add New User</button>
         </NavLink>
 
         <br />
@@ -60,34 +61,35 @@ else
         <table class="table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Image</th>
-                    <th>Price Range (RM)</th>
-                    <th>Delete</th>
-                    <th>Edit</th>
+                    <th>User Name</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Role</th>
+                    <th>Email</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var p in productList)
+                @foreach (var p in userList)
                 {
                     <tr>
                         <td>
-                            <NavLink href="@($"productdetailpage/{p.Id}")">
-                                <span>@p.Name</span>
+                            <NavLink href="@($"userdetailpage/{p.Id}")">
+                                <span>@p.UserName</span>
                             </NavLink>
                         </td>
-                        <td class="example">@p.Description</td>
-                        <td><img style="width: 200px; height: 160px; border-radius:8px;" src="@p.Pictures" /></td>
-                        <td>@p.Price1.ToString("N0") - @p.Price2.ToString("N0")</td>
-                        <td>
+                        <td>@p.FirstName</td>
+                        <td>@p.LastName</td>
+                        <td>@p.Role</td>
+                        <td>@p.Email</td>
+
+@*                        <td>
                             <button type="button" class="btn btn-danger" @onclick="async () => {await DeleteProduct(p.Id);}"><i class="fa fa-trash" /></button>
                          </td>
                         <td>
                             <NavLink href="@($"editproductpage/{p.Id}")">
                                 <button type="button" class="btn btn-primary"><i class="fa fa-edit" /></button>
                             </NavLink>                            
-                        </td>
+                        </td>*@
                     </tr>
                 }
             </tbody>
@@ -96,30 +98,15 @@ else
 }
 
 @code {
-    private List<Product>? productList;
+    private List<UserAccount>? userList;
 
     protected override async Task OnInitializedAsync()
     {
-        productList = await httpClient.GetFromJsonAsync<List<Product>>("api/Product/GetProducts");
+        userList = await httpClient.GetFromJsonAsync<List<UserAccount>>("api/Account/GetUsers");
         await base.OnInitializedAsync();
     }
 
-    private void AddProduct()
-    {
-        navManager.NavigateTo("addproduct", true);
-    }
 
-    private async Task DeleteProduct(int productId)
-    {
-        var result = await httpClient.DeleteAsync($"api/Product/DeleteProduct?productId={productId}");
-        if (result.StatusCode == System.Net.HttpStatusCode.OK)
-            productList = await httpClient.GetFromJsonAsync<List<Product>>("api/Product/GetProducts");
-        else
-        {
-            await js.InvokeVoidAsync("alert", "Error remove product.");
-            return;
-        }        
-    }
 
 
 }

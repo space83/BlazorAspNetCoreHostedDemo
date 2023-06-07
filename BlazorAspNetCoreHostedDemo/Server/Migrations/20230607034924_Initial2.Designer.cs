@@ -3,6 +3,7 @@ using BlazorAspNetCoreHostedDemo.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorAspNetCoreHostedDemo.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230607034924_Initial2")]
+    partial class Initial2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,34 +80,6 @@ namespace BlazorAspNetCoreHostedDemo.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserAccount");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ContactNo = "",
-                            Country = "",
-                            Email = "admin@system.com",
-                            FirstName = "Admin",
-                            Gender = "",
-                            LastName = "System",
-                            Password = "admin",
-                            Role = "Administrator",
-                            UserName = "admin"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ContactNo = "",
-                            Country = "",
-                            Email = "user@system.com",
-                            FirstName = "User",
-                            Gender = "",
-                            LastName = "System",
-                            Password = "user",
-                            Role = "user",
-                            UserName = "user"
-                        });
                 });
 
             modelBuilder.Entity("BlazorAspNetCoreHostedDemo.Shared.Product", b =>
@@ -138,35 +113,6 @@ namespace BlazorAspNetCoreHostedDemo.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Product");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "The Mazdaspeed 3 is a sport compact hatchback introduced for the 2007 model year by Mazdaspeed and produced until 2013. The Mazdaspeed3 is a performance-enhanced version of the 5-door Mazda3. lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen",
-                            Name = "Mazda 3 MPS",
-                            Pictures = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkzdAyIgacPSF3KGaUTMicrAxOkVozyC8-Hw&usqp=CAU",
-                            Price1 = 75888.0,
-                            Price2 = 85888.0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "The Renault Mégane (French pronunciation: meɡan), also spelled without the acute accent as Megane,[1] especially in languages other than French, is a small family car produced by the French car manufacturer Renault for model year 1996, and was the successor to the Renault 19. lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen",
-                            Name = "Renault Megane RS 250 Cup",
-                            Pictures = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWrOHHD-ATaYSkLdN6OxaVWQFWbdN_n-3MEw&usqp=CAU",
-                            Price1 = 69800.0,
-                            Price2 = 79800.0
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen",
-                            Name = "Volkswagen Golf GTI Mk6",
-                            Pictures = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXbIRxw8xqxqHn0rvUx7EUsI_u4Mw2EmpZ-Q&usqp=CAU",
-                            Price1 = 71800.0,
-                            Price2 = 81800.0
-                        });
                 });
 #pragma warning restore 612, 618
         }

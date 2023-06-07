@@ -1,0 +1,140 @@
+﻿@page "/userdetailpage/{userId:int}"
+@attribute [Authorize(Roles = "Administrator,User")]
+@using BlazorAspNetCoreHostedDemo.Client.Authentication
+@using BlazorAspNetCoreHostedDemo.Shared
+@using System.Net.Http.Headers
+@inject HttpClient httpClient
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject IJSRuntime js
+@inject NavigationManager navManager
+
+
+<style>
+    .centre {
+        text-align: center;
+    }
+
+    .right {
+        float: right;
+    }
+
+    .imgsize {
+        height: 210px;
+        width: 280px;
+    }
+
+    .table {
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9em;
+        font-family: sans-serif;
+        width: 100%
+    }
+
+        .table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+        }
+
+        .table th {
+            padding: 12px 15px;
+            width: 20%;
+            text-align: left;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            /* width: 10%; */
+        }
+
+    .variance {
+        background-color: lightblue;
+        border: 7px solid lightblue;
+        display: block;
+        width: 98%;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+</style>
+
+
+@if (userDetail == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <PageTitle>User Detail</PageTitle>
+    <h3>User Detail</h3>
+    <br />
+    <br />
+
+    <div>
+
+        <table class="table">
+            <tr>
+                <th>Id:</th>
+                <td>@userDetail.Id</td>
+            </tr>
+            <tr>
+                <th>User Name:</th>
+                <td>@userDetail.UserName</td>
+            </tr>
+            <tr>
+                <th>Role:</th>
+                <td>@userDetail.Role</td>
+            </tr>
+            <tr>
+                <th>First Name:</th>
+                <td>@userDetail.FirstName</td>
+            </tr>
+            <tr>
+                <th>Last Name:</th>
+                <td>@userDetail.LastName</td>
+            </tr>
+            <tr>
+                <th>Email:</th>
+                <td>@userDetail.Email</td>
+            </tr>
+            <tr>
+                <th>Gender:</th>
+                <td>@userDetail.Gender</td>
+            </tr>
+            <tr>
+                <th>Contact No:</th>
+                <td>@userDetail.ContactNo</td>
+            </tr>
+            <tr>
+                <th>Country:</th>
+                <td>@userDetail.Country</td>
+            </tr>
+        </table>
+
+        <p class="variance">End of Info</p>
+
+        <div class="right">
+            <NavLink class="nav-link" href="userlist">
+                <button class="btn btn-primary">Back</button>
+            </NavLink>
+        </div>
+
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public int userId { get; set; }
+
+    private UserAccount? userDetail;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userDetail = await httpClient.GetFromJsonAsync<UserAccount>($"api/Account/GetUser?userId={userId}");
+        await base.OnInitializedAsync();
+    }
+
+
+}

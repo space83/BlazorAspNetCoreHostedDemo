@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using BlazorAspNetCoreHostedDemo.Shared;
+using BlazorAspNetCoreHostedDemo.Server.Authentication;
+using System.Reflection;
+
 namespace BlazorAspNetCoreHostedDemo.Server.Data
 {
     public class DataContext : DbContext
@@ -11,6 +14,8 @@ namespace BlazorAspNetCoreHostedDemo.Server.Data
 
         public DbSet<Product> Product { get; set; }
 
+        public DbSet<UserAccount> UserAccount { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasData(
@@ -19,7 +24,12 @@ namespace BlazorAspNetCoreHostedDemo.Server.Data
                 new Product { Id = 3, Name = "Volkswagen Golf GTI Mk6", Description = "lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen lorem ipsum Volkswagen", Pictures = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXbIRxw8xqxqHn0rvUx7EUsI_u4Mw2EmpZ-Q&usqp=CAU", Price1 = 71800, Price2 = 81800 }
                 );
 
+            modelBuilder.Entity<UserAccount>().HasData(
+                new UserAccount { Id = 1, UserName = "admin", Password = "admin", Role = "Administrator", FirstName = "Admin", LastName = "System", Email = "admin@system.com", Gender = "", ContactNo = "", Country = "" },
+                new UserAccount { Id = 2, UserName = "user", Password = "user", Role = "user", FirstName = "User", LastName = "System", Email = "user@system.com", Gender = "", ContactNo = "", Country = "" }
+                );
         }
+
 
     }
 }

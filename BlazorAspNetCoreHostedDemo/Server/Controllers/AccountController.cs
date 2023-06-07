@@ -28,5 +28,24 @@ namespace BlazorAspNetCoreHostedDemo.Server.Controllers
             else
                 return userSession;
         }
+
+        [HttpGet]
+        [Route("GetUsers")]
+        public ActionResult<List<UserAccount>> GetUsers()
+        {
+            return _userAccountService.GetUsers();
+
+        }
+
+        [HttpGet]
+        [Route("GetUser")]
+        public ActionResult<UserAccount> GetUser([FromQuery] int userId)
+        {
+            var userDetail = _userAccountService.GetUser(userId);
+            if (userDetail is null)
+                return Unauthorized();
+            else
+                return userDetail;
+        }
     }
 }

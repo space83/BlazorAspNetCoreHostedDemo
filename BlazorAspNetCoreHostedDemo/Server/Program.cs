@@ -39,7 +39,7 @@ builder.Services.AddAuthentication(o =>
     };
 });
 
-builder.Services.AddSingleton<UserAccountService>();
+builder.Services.AddTransient<UserAccountService>();
 builder.Services.AddTransient<ProductService>();
 
 var app = builder.Build();

@@ -1,21 +1,32 @@
-﻿namespace BlazorAspNetCoreHostedDemo.Server.Authentication
+﻿using BlazorAspNetCoreHostedDemo.Server.Data;
+using BlazorAspNetCoreHostedDemo.Shared;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BlazorAspNetCoreHostedDemo.Server.Authentication
 {
     public class UserAccountService
     {
-        private List<UserAccount> _userAccountList;
+        private readonly DataContext _context;
 
-        public UserAccountService()
+
+        public UserAccountService(DataContext context)
         {
-            _userAccountList = new List<UserAccount>
-            {
-                new UserAccount { UserName = "admin", Password = "admin", Role = "Administrator" },
-                new UserAccount { UserName = "user", Password = "user", Role = "User" }
-            };
+            _context = context;
         }
 
         public UserAccount? GetUserAccountByUserName(string userName)
         {
-            return _userAccountList.FirstOrDefault(x => x.UserName == userName);
+            return _context.UserAccount.FirstOrDefault(x => x.UserName == userName);
+        }
+
+        public List<UserAccount> GetUsers()
+        {
+            return _context.UserAccount.ToList();
+        }
+
+        public UserAccount? GetUser(int userId)
+        {
+            return _context.UserAccount.FirstOrDefault(x => x.Id == userId);
         }
 
 
