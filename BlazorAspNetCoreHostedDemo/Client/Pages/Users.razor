@@ -1,0 +1,125 @@
+﻿@page "/users"
+@attribute [Authorize(Roles = "Administrator,User")]
+@using BlazorAspNetCoreHostedDemo.Shared
+@inject HttpClient httpClient
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navManager
+@using System.Net.Http.Headers
+@inject IJSRuntime js
+
+
+<style>
+    .example:after {
+        content: '...';
+        display: inline-block;
+        color: #000;
+        font-size: 20px;
+        position: relative;
+        top: -40px;
+        left: 31px;
+    }
+
+    .example {
+        width: 600px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        height: 5.1em;
+        display: block;
+        overflow: hidden;
+        position: relative;
+        padding: 0 0.5em;
+    }
+
+    .left {
+        float: left;
+    }
+
+
+</style>
+
+
+@if (productList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <PageTitle>Products</PageTitle>
+    <h3>Products</h3>
+
+    <div>
+        <NavLink class="nav-link" href="addproductpage">
+            <button class="left btn btn-primary">Add New Product</button>
+        </NavLink>
+
+        <br />
+        <br />
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Price Range (RM)</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in productList)
+                {
+                    <tr>
+                        <td>
+                            <NavLink href="@($"productdetailpage/{p.Id}")">
+                                <span>@p.Name</span>
+                            </NavLink>
+                        </td>
+                        <td class="example">@p.Description</td>
+                        <td><img style="width: 200px; height: 160px; border-radius:8px;" src="@p.Pictures" /></td>
+                        <td>@p.Price1.ToString("N0") - @p.Price2.ToString("N0")</td>
+                        <td>
+                            <button type="button" class="btn btn-danger" @onclick="async () => {await DeleteProduct(p.Id);}"><i class="fa fa-trash" /></button>
+                         </td>
+                        <td>
+                            <NavLink href="@($"editproductpage/{p.Id}")">
+                                <button type="button" class="btn btn-primary"><i class="fa fa-edit" /></button>
+                            </NavLink>                            
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<Product>? productList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        productList = await httpClient.GetFromJsonAsync<List<Product>>("api/Product/GetProducts");
+        await base.OnInitializedAsync();
+    }
+
+    private void AddProduct()
+    {
+        navManager.NavigateTo("addproduct", true);
+    }
+
+    private async Task DeleteProduct(int productId)
+    {
+        var result = await httpClient.DeleteAsync($"api/Product/DeleteProduct?productId={productId}");
+        if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            productList = await httpClient.GetFromJsonAsync<List<Product>>("api/Product/GetProducts");
+        else
+        {
+            await js.InvokeVoidAsync("alert", "Error remove product.");
+            return;
+        }        
+    }
+
+
+}

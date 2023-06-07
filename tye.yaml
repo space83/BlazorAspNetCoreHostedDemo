@@ -1,0 +1,33 @@
+
+name: tye-video
+services:
+- name: weather-api
+  project: BlazorAspNetCoreHostedDemo/Server/BlazorAspNetCoreHostedDemo.Server.csproj 
+  bindings:
+  - port: 8000
+- name: blazor-app
+  project: BlazorAspNetCoreHostedDemo/Client/BlazorAspNetCoreHostedDemo.Client.csproj
+  bindings:
+  - port: 7000
+
+# name: blazoraspnetcorehosteddemo
+# ingress:
+#   - name: ingress
+#     bindings:
+#       - port: 8080
+#         protocol: https
+#     rules:
+#       - path: /api
+#         service: rest-api
+#       - service: blazoraspnetcorehosteddemo-server
+# services:
+# - name: blazoraspnetcorehosteddemo-server
+#   project: BlazorAspNetCoreHostedDemo/Server/BlazorAspNetCoreHostedDemo.Server.csproj
+#   bindings:
+#   - port: 5000
+#     protocol: http
+# - name: rest-api
+#   project: Rest_Api/Rest_Api.csproj
+#   bindings:
+#   - port: 5002
+#     protocol: http

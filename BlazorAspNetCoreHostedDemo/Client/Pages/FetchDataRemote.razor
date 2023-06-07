@@ -1,4 +1,4 @@
-﻿@page "/fetchdata"
+﻿@page "/fetchdataremote"
 @attribute [Authorize(Roles = "Administrator")]
 @using BlazorAspNetCoreHostedDemo.Client.Authentication
 @using BlazorAspNetCoreHostedDemo.Shared
@@ -7,7 +7,7 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navManager
 
-<PageTitle>Weather forecast local</PageTitle>
+<PageTitle>Weather forecast Remote</PageTitle>
 
 <h1>Weather forecast</h1>
 
@@ -52,7 +52,7 @@ else
         if (!string.IsNullOrWhiteSpace(token))
         {
             Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
-            forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+            forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("api/WeatherForecast");
         }
         else
         {
