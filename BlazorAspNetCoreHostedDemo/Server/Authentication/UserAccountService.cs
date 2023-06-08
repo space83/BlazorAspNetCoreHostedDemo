@@ -29,6 +29,12 @@ namespace BlazorAspNetCoreHostedDemo.Server.Authentication
             return _context.UserAccount.FirstOrDefault(x => x.Id == userId);
         }
 
+        public void AddUser(UserAccount user)
+        {
+            _context.UserAccount.Add(user);
+            _context.SaveChanges();
+        }
+
 
     }
 }

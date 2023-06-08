@@ -7,7 +7,7 @@ namespace BlazorAspNetCoreHostedDemo.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : Controller
     {
         private UserAccountService _userAccountService;
 
@@ -47,5 +47,22 @@ namespace BlazorAspNetCoreHostedDemo.Server.Controllers
             else
                 return userDetail;
         }
+
+        [HttpPost]
+        [Route("AddUser")]
+        public ActionResult AddUser([FromBody] UserAccount user)
+        {
+            try
+            {
+                _userAccountService.AddUser(user);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
     }
 }

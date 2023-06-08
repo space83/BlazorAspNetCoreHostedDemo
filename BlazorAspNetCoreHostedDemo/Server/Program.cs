@@ -30,10 +30,9 @@ builder.Services.AddAuthentication(o =>
     o.RequireHttpsMetadata = false;
     o.SaveToken = true;
     o.TokenValidationParameters = new TokenValidationParameters
-    {
-        
+    {        
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JwtAuthenticationManager.JWT_SECURITY_KEY)), //NOT WORKS!!!
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JwtAuthenticationManager.JWT_SECURITY_KEY)),
         ValidateIssuer = false,
         ValidateAudience = false
     };
@@ -66,6 +65,7 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
+//  NOTES: this is for microservices to work
 app.UseCors(cors => cors
     .AllowAnyMethod()
     .AllowAnyHeader()

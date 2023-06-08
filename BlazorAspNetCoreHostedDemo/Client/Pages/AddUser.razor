@@ -1,0 +1,102 @@
+﻿@page "/adduser"
+@attribute [Authorize(Roles = "Administrator,User")]
+@using BlazorAspNetCoreHostedDemo.Shared
+@using System.Net;
+@inject HttpClient httpClient
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navManager
+@inject IJSRuntime js
+
+<PageTitle>Add Product</PageTitle>
+<h3>Add Product</h3>
+
+
+<div class="row">    
+    <div class="col-lg-12 offset-lg-12 pt-12 pb-12 border">
+        <br />
+        <div class="mb-3 col-md-3">
+            <label>User Name</label>
+            <input type="text" class="form-control" placeholder="Name" @bind="newUser.UserName" />
+        </div>
+
+        <div class="mb-3 col-md-3">
+            <label>Password:</label>
+            <input type="password" class="form-control" @bind="newUser.Password" />
+        </div>
+
+        <div class="mb-3 col-md-3">
+            <label>Role:</label>            
+            <select class="form-select" aria-label="Default select example">
+                <option value="Administrator">Administrator</option>
+                <option value="User">User</option>
+            </select>
+        </div>
+
+        <div class="mb-3 col-md-6">
+            <label>First Name:</label>
+            <input type="text" class="form-control" @bind="newUser.FirstName" />
+        </div>
+
+        <div class="mb-3 col-md-6">
+            <label>Last Name:</label>
+            <input type="text" class="form-control" @bind="newUser.LastName" />
+        </div>
+
+        <div class="mb-3 col-md-6">
+            <label>Email:</label>
+            <input type="text" class="form-control" @bind="newUser.Email" />
+        </div>
+
+        <div class="mb-3 col-md-1">
+            <label>Gender:</label>
+            <select class="form-select" aria-label="Default select example" @bind="newUser.Gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+
+        <div class="mb-3 col-md-3">
+            <label>Contact No:</label>
+            <input type="text" class="form-control" @bind="newUser.ContactNo" />
+        </div>
+
+        <div class="mb-3 col-md-3">
+            <label>Country:</label>
+            <select class="form-select" aria-label="Default select example" @bind="newUser.Country">
+                <option value="Malaysia">Malaysia</option>
+                <option value="Singapore">Singapore</option>
+                <option value="Indonesia">Indonesia</option>
+                <option value="Others">Others</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-primary" @onclick="AddNewUser">Submit</button>
+        </div>       
+    </div>
+    <br />
+</div>
+<br />
+<br />
+
+@code {
+    private UserAccount newUser = new UserAccount();
+   
+
+    private async Task AddNewUser()
+    {
+        var result = await httpClient.PostAsJsonAsync<UserAccount>("api/Account/AddUser", newUser);
+        if (result.StatusCode == HttpStatusCode.OK)
+        {
+            navManager.NavigateTo("userlist", true);
+        }
+        
+        else
+        {
+            await js.InvokeVoidAsync("alert", "Error add user.");
+            return;
+        }
+    }
+
+
+}
