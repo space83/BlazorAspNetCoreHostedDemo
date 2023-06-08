@@ -91,32 +91,26 @@ namespace BlazorAspNetCoreHostedDemo.Server.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContactNo")
-                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
@@ -143,11 +137,8 @@ namespace BlazorAspNetCoreHostedDemo.Server.Migrations
                         new
                         {
                             Id = 1,
-                            ContactNo = "",
-                            Country = "",
                             Email = "admin@system.com",
                             FirstName = "Admin",
-                            Gender = "",
                             LastName = "System",
                             Password = "admin",
                             Role = "Administrator",
@@ -156,14 +147,11 @@ namespace BlazorAspNetCoreHostedDemo.Server.Migrations
                         new
                         {
                             Id = 2,
-                            ContactNo = "",
-                            Country = "",
                             Email = "user@system.com",
                             FirstName = "User",
-                            Gender = "",
                             LastName = "System",
                             Password = "user",
-                            Role = "user",
+                            Role = "User",
                             UserName = "user"
                         });
                 });

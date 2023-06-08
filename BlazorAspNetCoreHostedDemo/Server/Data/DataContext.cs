@@ -25,8 +25,8 @@ namespace BlazorAspNetCoreHostedDemo.Server.Data
                 );
 
             modelBuilder.Entity<UserAccount>().HasData(
-                new UserAccount { Id = 1, UserName = "admin", Password = "admin", Role = "Administrator", FirstName = "Admin", LastName = "System", Email = "admin@system.com", Gender = "", ContactNo = "", Country = "" },
-                new UserAccount { Id = 2, UserName = "user", Password = "user", Role = "user", FirstName = "User", LastName = "System", Email = "user@system.com", Gender = "", ContactNo = "", Country = "" }
+                new UserAccount { Id = 1, UserName = "admin", Password = "admin", Role = "Administrator", FirstName = "Admin", LastName = "System", Email = "admin@system.com" },
+                new UserAccount { Id = 2, UserName = "user", Password = "user", Role = "User", FirstName = "User", LastName = "System", Email = "user@system.com" }
                 );
         }
 

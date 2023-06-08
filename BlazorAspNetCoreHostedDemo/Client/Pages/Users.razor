@@ -66,6 +66,7 @@ else
                     <th>Last Name</th>
                     <th>Role</th>
                     <th>Email</th>
+                    <th>Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -81,15 +82,11 @@ else
                         <td>@p.LastName</td>
                         <td>@p.Role</td>
                         <td>@p.Email</td>
-
-@*                        <td>
-                            <button type="button" class="btn btn-danger" @onclick="async () => {await DeleteProduct(p.Id);}"><i class="fa fa-trash" /></button>
-                         </td>
                         <td>
-                            <NavLink href="@($"editproductpage/{p.Id}")">
+                            <NavLink href="@($"edituserpage/{p.Id}")">
                                 <button type="button" class="btn btn-primary"><i class="fa fa-edit" /></button>
-                            </NavLink>                            
-                        </td>*@
+                            </NavLink>
+                        </td>
                     </tr>
                 }
             </tbody>

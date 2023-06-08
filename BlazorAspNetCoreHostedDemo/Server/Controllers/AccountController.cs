@@ -63,6 +63,20 @@ namespace BlazorAspNetCoreHostedDemo.Server.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("UpdateUser")]
+        public ActionResult UpdateUser([FromBody] UserAccount user)
+        {
+            try
+            {
+                _userAccountService.UpdateUser(user);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }

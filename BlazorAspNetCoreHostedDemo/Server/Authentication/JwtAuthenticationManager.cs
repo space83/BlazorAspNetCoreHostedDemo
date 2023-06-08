@@ -38,7 +38,7 @@ namespace BlazorAspNetCoreHostedDemo.Server.Authentication
             var claimsIdentity = new ClaimsIdentity(new List<Claim>
             {
                 new Claim(ClaimTypes.Name, userAccount.UserName),
-                new Claim(ClaimTypes.Role, userAccount.Role)
+                new Claim(ClaimTypes.Role, userAccount.Role.ToString())
             });
 
             var signingCredentials = new SigningCredentials(
@@ -60,7 +60,7 @@ namespace BlazorAspNetCoreHostedDemo.Server.Authentication
             var userSession = new UserSession
             {
                 UserName = userAccount.UserName,
-                Role = userAccount.Role,
+                Role = userAccount.Role.ToString(),
                 Token = token,
                 ExpiresIn = (int)tokenExpiryTimeStamp.Subtract(DateTime.Now).TotalSeconds
             };

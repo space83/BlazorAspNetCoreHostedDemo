@@ -1,6 +1,7 @@
 ﻿using BlazorAspNetCoreHostedDemo.Server.Data;
 using BlazorAspNetCoreHostedDemo.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorAspNetCoreHostedDemo.Server.Authentication
 {
@@ -35,6 +36,12 @@ namespace BlazorAspNetCoreHostedDemo.Server.Authentication
             _context.SaveChanges();
         }
 
+        public void UpdateUser(UserAccount user)
+        {
+            _context.UserAccount.Add(user);
+            _context.UserAccount.Entry(user).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
 
     }
 }

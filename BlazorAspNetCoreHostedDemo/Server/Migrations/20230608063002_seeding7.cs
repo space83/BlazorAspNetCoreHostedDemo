@@ -5,7 +5,7 @@
 namespace BlazorAspNetCoreHostedDemo.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class seeding4 : Migration
+    public partial class seeding7 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

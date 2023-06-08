@@ -1,0 +1,133 @@
+﻿@page "/edituserpage/{userId:int}"
+@attribute [Authorize(Roles = "Administrator,User")]
+@using BlazorAspNetCoreHostedDemo.Shared
+@using System.Net;
+@inject HttpClient httpClient
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navManager
+@inject IJSRuntime js
+
+<PageTitle>Edit User</PageTitle>
+<h3>Edit User</h3>
+
+@if (editUser == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@editUser" OnValidSubmit="@UpdateUser">
+        <div class="row">
+            <div class="col-lg-12 offset-lg-12 pt-12 pb-12 border">
+                <br />
+                <DataAnnotationsValidator />
+                <div class="mb-3 col-md-3">
+                    <label>User Name</label>
+                    <input type="text" class="form-control" placeholder="User Name" @bind="editUser.UserName" />
+                    <ValidationMessage For="@(() => editUser.UserName)" />
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label>Password:</label>
+                    <input type="password" class="form-control" placeholder="Password" @bind="editUser.Password" />
+                    <ValidationMessage For="@(() => editUser.Password)" />
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label>Role:</label>
+                    <select class="form-select" aria-label="Select Role" @bind="editUser.Role">
+                        <option value=null>--Select Role--</option>
+                        <option value="Administrator">Administrator</option>
+                        <option value="User">User</option>
+                    </select>
+                    <ValidationMessage For="@(() => editUser.Role)" />
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label>First Name:</label>
+                    <input type="text" class="form-control" placeholder="First Name" @bind="editUser.FirstName" />
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label>Last Name:</label>
+                    <input type="text" class="form-control" placeholder="Last Name" @bind="editUser.LastName" />
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label>Email:</label>
+                    <input type="text" class="form-control" placeholder="Email" @bind="editUser.Email" />
+                    <ValidationMessage For="@(() => editUser.Email)" />
+                </div>
+
+                <div class="mb-3 col-md-2">
+                    <label>Gender:</label>
+                    <InputSelect class="form-select" aria-label="Select Gender" @bind-Value="editUser.Gender">
+                        <option value="">--Select Gender--</option>
+                        @foreach (var p in Enum.GetValues(typeof(Gender)))
+                        {
+                            <option value="@p">@p</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label>Contact No:</label>
+                    <input type="text" class="form-control" @bind="editUser.ContactNo" />
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label>Country:</label>
+                    <InputSelect class="form-select" aria-label="Select Country" @bind-Value="editUser.Country">
+                        <option value="">--Select Country--</option>
+                        @foreach (var p in Enum.GetValues(typeof(Country)))
+                        {
+                            <option value="@p">@p</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <button class="btn btn-primary" type="submit">Update</button>
+                </div>
+            </div>
+            <br />
+        </div>
+        <br />
+        <br />
+    </EditForm>
+}
+
+
+
+
+@code {
+    [Parameter]
+    public int userId { get; set; }
+
+    private UserAccount? editUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        editUser = await httpClient.GetFromJsonAsync<UserAccount>($"api/Account/GetUser?userId={userId}");
+        await base.OnInitializedAsync();
+    }
+
+    private async Task UpdateUser()
+    {
+        var result = await httpClient.PostAsJsonAsync<UserAccount?>("api/Account/UpdateUser", editUser);
+        if (result.StatusCode == HttpStatusCode.OK)
+        {
+            navManager.NavigateTo("userlist", true);
+        }
+
+        else
+        {
+            await js.InvokeVoidAsync("alert", "Error update User.");
+            return;
+        }
+
+        return;
+    }
+
+
+}
