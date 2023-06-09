@@ -21,10 +21,10 @@ namespace BlazorAspNetCoreHostedDemo.Server.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator")]
-        public IEnumerable<WeatherForecast> Get()
+        [Authorize(Roles = "Administrator, User")]
+        public IEnumerable<WeatherForecast> Get(int page)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return Enumerable.Range(page * 5 - 4, 3).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = Random.Shared.Next(-20, 55),

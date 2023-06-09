@@ -1,5 +1,5 @@
 ﻿@page "/fetchdata"
-@attribute [Authorize(Roles = "Administrator")]
+@attribute [Authorize(Roles = "Administrator, User")]
 @using BlazorAspNetCoreHostedDemo.Client.Authentication
 @using BlazorAspNetCoreHostedDemo.Shared
 @using System.Net.Http.Headers
@@ -40,10 +40,33 @@ else
             }
         </tbody>
     </table>
+
+    <div>
+        <input type="button" class="btn-lg btn" id="prev" @onclick="PrevPage" value="Previous" />
+
+        @for(int i=CurPage-2; i<=CurPage + 2; i++)
+        {
+            int j = i;
+            @if (i > 0)
+            {
+                if (i == CurPage)
+                {
+                    <span class="px-2" style="font-weight:bold; cursor: pointer" @onclick="() => ShowPage(j)">@i</span>
+                }
+                else
+                {
+                    <span class="px-2" style="cursor: pointer" @onclick="() => ShowPage(j)">@i</span>
+                }                
+            }            
+        }
+        
+        <input type="button" class="btn-lg btn" id="next" @onclick="NextPage" value="Next" />
+    </div>
 }
 
 @code {
     private WeatherForecast[]? forecasts;
+    private int CurPage = 1;
 
     protected override async Task OnInitializedAsync()
     {
@@ -52,13 +75,40 @@ else
         if (!string.IsNullOrWhiteSpace(token))
         {
             Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
-            forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+            await ShowPage();
         }
         else
         {
             navManager.NavigateTo("/login");
-        }
-        
-        
+        }     
     }
+
+    protected async Task NextPage()
+    {
+        CurPage++;
+        await ShowPage();
+    }
+
+    protected async Task ShowPage(int i)
+    {
+        CurPage = i;
+        await ShowPage();
+
+    }
+
+    protected async Task PrevPage()
+    {
+        if (CurPage > 1)
+        {
+            CurPage--;
+            await ShowPage();
+        }
+    }
+
+    protected async Task ShowPage()
+    {        
+        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>($"/WeatherForecast?page={CurPage}");
+    }
+
+
 }

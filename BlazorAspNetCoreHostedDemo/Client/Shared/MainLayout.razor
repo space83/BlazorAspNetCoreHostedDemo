@@ -21,9 +21,12 @@
             </AuthorizeView>
         </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
+        @*Application level state provider*@
+        <PageIndexStateProvider>
+            <article class="content px-4">
+                @Body
+            </article>
+        </PageIndexStateProvider>
     </main>
 </div>
 

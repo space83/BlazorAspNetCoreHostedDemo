@@ -7,7 +7,8 @@
 @inject NavigationManager navManager
 @using System.Net.Http.Headers
 @inject IJSRuntime js
-
+@using BlazorAspNetCoreHostedDemo.Client.Models
+@using System
 
 <style>
     .example:after {
@@ -58,9 +59,10 @@ else
         <br />
         <br />
 
-        <table class="table">
+        <table class="table table-sm table-bordered table-striped">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>User Name</th>
                     <th>First Name</th>
                     <th>Last Name</th>
@@ -70,9 +72,10 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var p in userList)
+                @foreach (var p in users)
                 {
                     <tr>
+                        <td>@p.Id</td>
                         <td>
                             <NavLink href="@($"userdetailpage/{p.Id}")">
                                 <span>@p.UserName</span>
@@ -90,20 +93,58 @@ else
                     </tr>
                 }
             </tbody>
+            <tfoot>
+                <Pagination TotalPages="@(totalPages != 0 ? totalPages : 1)"
+                            PageIndex="@State.PageIndex"
+                            Radius="3"
+                            OnSelectedPage="@SelectedPage">
+                </Pagination>
+            </tfoot>
         </table>
     </div>
 }
 
 @code {
+    [CascadingParameter]
+    PageIndexStateProvider State { get; set; }
+
+    private int itemsPerPage = 5;
+    private int totalPages = 1;    
+
     private List<UserAccount>? userList;
+    private List<UserAccount>? users;
 
     protected override async Task OnInitializedAsync()
     {
         userList = await httpClient.GetFromJsonAsync<List<UserAccount>>("api/Account/GetUsers");
-        await base.OnInitializedAsync();
+        if (userList != null)
+        {
+            try
+            {
+                // Initialize the number of "totalPages"
+                var minPage = (userList.Count() / itemsPerPage);
+                totalPages = userList.Count() % itemsPerPage != 0 ? minPage + 1 : minPage; 
+
+                // Initialize the "comments" which will be displayed when the page loaded first time.
+                var skipCount = itemsPerPage * (State.PageIndex - 1);
+                users = userList.Skip(skipCount).Take(itemsPerPage).ToList();
+            }
+            catch (Exception Ex)
+            {
+                
+            }
+        }        
     }
 
-
+    private void SelectedPage(int selectedPageIndex)
+    {
+        if (userList != null)
+        {
+            State.PageIndex = selectedPageIndex;
+            var skipCount = itemsPerPage * (State.PageIndex - 1);
+            users = userList.Skip(skipCount).Take(itemsPerPage).ToList();
+        }
+    }
 
 
 }
