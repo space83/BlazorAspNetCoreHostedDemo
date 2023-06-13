@@ -6,7 +6,7 @@
 @inject NavigationManager navManager
 @using System.Net.Http.Headers
 @inject IJSRuntime js
-
+@using Radzen
 
 <style>
     .example:after {
@@ -53,11 +53,37 @@ else
         <NavLink class="nav-link" href="addproductpage">
             <button class="left btn btn-primary">Add New Product</button>
         </NavLink>
-
+         
         <br />
         <br />
 
-        <table class="table">
+        <RadzenGrid AllowPaging="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" PageSize="5" AllowSorting="true"
+                    Data="@productList" TItem="Product" ColumnWidth="150px">
+            <Columns>
+                <RadzenGridColumn TItem="Product" Property="Name" Title="Name"></RadzenGridColumn>
+                <RadzenGridColumn TItem="Product" Property="Description" Title="Description"></RadzenGridColumn>
+
+                <RadzenGridColumn TItem="Product" Property="" Title="Picture" Filterable="false">
+                    <Template Context="order">
+                        <RadzenImage Path="@order.Pictures" style="width: 200px; height: 160px; border-radius:8px;" />
+                    </Template>
+                </RadzenGridColumn>
+
+                <RadzenGridColumn TItem="Product" Property="Price1" Title="From (RM)" Filterable="false"></RadzenGridColumn>
+                <RadzenGridColumn TItem="Product" Property="Price2" Title="To (RM)" Filterable="false"></RadzenGridColumn>
+                <RadzenGridColumn TItem="Product" Property="" Title="Action">
+                    <Template Context="order">
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" class="my-1 ms-1" Click="@(args => DeleteProduct(order.Id))" @onclick:stopPropagation="true">
+                        </RadzenButton>
+                        <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(args => NavigateProduct(order.Id))" @onclick:stopPropagation="true">
+                        </RadzenButton>
+                    </Template>
+                </RadzenGridColumn>
+            </Columns>
+
+        </RadzenGrid>
+
+@*        <table class="table">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -91,7 +117,7 @@ else
                     </tr>
                 }
             </tbody>
-        </table>
+        </table>*@
     </div>
 }
 
@@ -119,6 +145,12 @@ else
             await js.InvokeVoidAsync("alert", "Error remove product.");
             return;
         }        
+    }
+
+    private async Task NavigateProduct(int productId)
+    {
+        navManager.NavigateTo("editproductpage/" + productId, true);
+        await base.OnInitializedAsync();
     }
 
 
